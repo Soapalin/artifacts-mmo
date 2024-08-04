@@ -9,6 +9,82 @@ class Player():
         self.cooldown = 0
         self.server = "https://api.artifactsmmo.com" 
         self.last_updated = datetime.datetime.now()
+        self.init_char_status()
+
+    def init_char_status(self):
+        status, response = self.fetch_character_status()
+        if status == 200:
+            self.level = response["level"]
+            self.xp = response["xp"]
+            self.max_xp = response["max_xp"]
+            self.total_xp = response["total_xp"]
+            self.gold = response["gold"]
+            self.speed = response["speed"]
+            self.mining_level = response["mining_level"]
+            self.mining_xp = response["mining_xp"]
+            self.mining_max_xp = response["mining_max_xp"]
+            self.woodcutting_level = response["woodcutting_level"]
+            self.woodcutting_xp = response["woodcutting_xp"]
+            self.woodcutting_max_xp = response["woodcutting_max_xp"]
+            self.fishing_level = response["fishing_level"]
+            self.fishing_xp = response["fishing_xp"]
+            self.fishing_max_xp = response["fishing_max_xp"]
+            self.weaponcrafting_level = response["weaponcrafting_level"]
+            self.weaponcrafting_xp = response["weaponcrafting_xp"]
+            self.weaponcrafting_max_xp = response["weaponcrafting_max_xp"]
+            self.gearcrafting_level = response["gearcrafting_level"]
+            self.gearcrafting_xp = response["gearcrafting_xp"]
+            self.gearcrafting_max_xp = response["gearcrafting_max_xp"]
+            self.jewelrycrafting_level = response["jewelrycrafting_level"]
+            self.jewelrycrafting_xp = response["jewelrycrafting_xp"]
+            self.jewelrycrafting_max_xp = response["jewelrycrafting_max_xp"]
+            self.cooking_level = response["cooking_level"]
+            self.cooking_xp = response["cooking_xp"]
+            self.cooking_max_xp = response["cooking_max_xp"]
+            self.hp = response["hp"]
+            self.haste = response["haste"]
+            self.critical_strike = response["critical_strike"]
+            self.stamina = response["stamina"]
+            self.attack_fire = response["attack_fire"]
+            self.attack_earth = response["attack_earth"]
+            self.attack_water = response["attack_water"]
+            self.attack_air = response["attack_air"]
+            self.dmg_fire = response["dmg_fire"]
+            self.dmg_earth = response["dmg_earth"]
+            self.dmg_water = response["dmg_water"]
+            self.dmg_air = response["dmg_air"]
+            self.res_fire = response["res_fire"]
+            self.res_earth = response["res_earth"]
+            self.res_water = response["res_water"]
+            self.res_air = response["res_air"]
+            self.x = response["x"]
+            self.y = response["y"]
+            self.cooldown = response["cooldown"]
+            self.cooldown_expiration = response["cooldown_expiration"]
+            self.weapon_slot = response["weapon_slot"]
+            self.shield_slot = response["shield_slot"]
+            self.helmet_slot = response["helmet_slot"]
+            self.body_armor_slot = response["body_armor_slot"]
+            self.leg_armor_slot = response["leg_armor_slot"]
+            self.boots_slot = response["boots_slot"]
+            self.ring1_slot = response["ring1_slot"]
+            self.ring2_slot = response["ring2_slot"]
+            self.amulet_slot = response["amulet_slot"]
+            self.artifact1_slot = response["artifact1_slot"]
+            self.artifact2_slot = response["artifact2_slot"]
+            self.artifact3_slot = response["artifact3_slot"]
+            self.consumable1_slot = response["consumable1_slot"]
+            self.consumable1_slot_quantity = response["consumable1_slot_quantity"]
+            self.consumable2_slot = response["consumable2_slot"]
+            self.consumable2_slot_quantity = response["consumable2_slot_quantity"]
+            self.task = response["task"]
+            self.task_type = response["task_type"]
+            self.task_progress = response["task_progress"]
+            self.task_total = response["task_total"]
+            self.inventory_max_items = response["inventory_max_items"]
+            self.inventory = response["inventory"]
+        else:
+            raise Exception(f"fetch_character_status: {status} - {response}")
 
     def move(self, x, y):
         body = "{" + f"\"x\": \"{x}\",\"y\": \"{y}\""  + "}"
@@ -29,6 +105,25 @@ class Player():
         self.cooldown = cooldown
 
 
+    def fetch_character_status(self):
+        char_status = f"{self.server}/characters/{self.name}"
+        r = requests.get(char_status, headers=self.auth_header)
+        print(r.status_code)
+        if r.status_code == 200:
+            response = r.json()["data"]
+            return r.status_code, r.json()["data"]
+            
+
+        else:
+            return r.status_code, r.json()
+
+
+
     def fight(self):
-        body = f""
         fight_api = f"{self.server}/my/{self.name}/action/fight"
+        r = requests.post(fight_api, headers=self.auth_header)
+        print(r.status_code)
+        if r.status_code == 200:
+            response = r.json()["data"]
+            print(response)
+            return response

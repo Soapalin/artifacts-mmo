@@ -12,8 +12,29 @@ class ArtifactAlgorithm(Player):
         print(self.server)
 
     def fighter():
+        """
+        Figher type of character will fight most of the time and explore the map
+        """
+        pass
+    
+    def gatherer():
+        """
+        Gatherer type of character will gather any types of resources
+        """
         pass
 
+
+    def miner():
+        """
+        Miner type of character will gather mining resources
+        """
+        pass
+
+    def crafter():
+        """
+        Crafter tpe of characgter will spent most of their time craft. 
+        """
+        pass
 
 
 
