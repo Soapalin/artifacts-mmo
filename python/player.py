@@ -125,5 +125,7 @@ class Player():
         print(r.status_code)
         if r.status_code == 200:
             response = r.json()["data"]
-            print(response)
-            return response
+            # print(response)
+            return r.status_code, response
+        else:
+            return r.status_code, r.json()
