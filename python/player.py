@@ -1,5 +1,6 @@
 import requests
 import datetime
+import time
 
 class Player():
     def __init__(self, name, jwt):
@@ -60,6 +61,8 @@ class Player():
             self.x = response["x"]
             self.y = response["y"]
             self.cooldown = response["cooldown"]
+            print(self.cooldown)
+            self.waitCooldown()
             self.cooldown_expiration = response["cooldown_expiration"]
             self.weapon_slot = response["weapon_slot"]
             self.shield_slot = response["shield_slot"]
@@ -90,11 +93,12 @@ class Player():
         body = "{" + f"\"x\": \"{x}\",\"y\": \"{y}\""  + "}"
         move_api = f"{self.server}/my/{self.name}/action/move"
         r = requests.post(move_api, data=body, headers=self.auth_header)
-        print(r.status_code)
+        print(f"move: {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
             print(response)
             self.updateCooldown(response["cooldown"]["remaining_seconds"])
+            self.waitCooldown()
             return r.json()["data"]
         else:
             return r.json()
@@ -104,28 +108,69 @@ class Player():
         self.last_updated = datetime.datetime.now()
         self.cooldown = cooldown
 
+    def waitCooldown(self):
+        print(f"waitCooldown: {self.cooldown}s")
+        time.sleep(self.cooldown)
+
 
     def fetch_character_status(self):
         char_status = f"{self.server}/characters/{self.name}"
         r = requests.get(char_status, headers=self.auth_header)
-        print(r.status_code)
+        print(f"fetch_character_status: {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
-            return r.status_code, r.json()["data"]
-            
-
+            return r.status_code, response
         else:
             return r.status_code, r.json()
+    
 
+    def batch_deposit_items_to_bank(self):
+        for item in self.inventory:
+            if item["code"] != "":
+                status, response = self.deposit_item_to_bank(item["code"], item["quantity"])
+                if status == 491:
+                    cooldown = response["error"]["message"].rstrip(" seconds left.")
+                    cooldown = cooldown.lstrip("Character in cooldown: ")
+                    cooldown = int(cooldown)
+                    time.sleep(cooldown+1)
+                    status, response = self.deposit_item_to_bank(item["code"], item["quantity"])
+
+
+
+    def deposit_item_to_bank(self, item_code, quantity):
+        deposit_api = f"{self.server}/my/{self.name}/action/bank/deposit"
+        body = "{" + f"\"code\": \"{item_code}\",\"quantity\": {quantity}"  + "}"
+        r = requests.post(deposit_api, data=body, headers=self.auth_header)
+        if r.status_code == 200:
+            print(f"Deposit Item To Bank: {item_code}, {quantity}")
+            response = r.json()["data"]
+            self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+            self.waitCooldown()
+            return r.status_code, response
+        else:
+            print(f"Fail to deposit to bank: {r.json()}")
+            return r.status_code, r.json()
+
+
+    def deposit_gold_to_bank(self, amount):
+        pass
 
 
     def fight(self):
         fight_api = f"{self.server}/my/{self.name}/action/fight"
         r = requests.post(fight_api, headers=self.auth_header)
-        print(r.status_code)
+        print(f"fight: {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
-            # print(response)
+            self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+            self.waitCooldown()
             return r.status_code, response
+        elif r.status_code == 499:
+                response = r.json()
+                cooldown = response["error"]["message"].rstrip(" seconds left.")
+                cooldown = cooldown.lstrip("Character in cooldown: ")
+                cooldown = int(cooldown.split(".")[0])
+                time.sleep(cooldown+1)
+                return r.status_code, response
         else:
             return r.status_code, r.json()
