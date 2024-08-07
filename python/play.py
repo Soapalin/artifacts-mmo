@@ -11,7 +11,9 @@ CHARACTER_NAMES = ["Rinsyi"]
 rinsyi = Player(name="Rinsyi", jwt=ACCOUNT_JWT)
 
 
-# rinsyi.move(0,1)
+# rinsyi.move_to_closest_bank()
+# rinsyi.batch_deposit_items_to_bank()
+# rinsyi.deposit_gold_to_bank()
 
 while True:
     try:
