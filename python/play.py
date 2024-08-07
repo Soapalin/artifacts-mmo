@@ -18,21 +18,6 @@ rinsyi = Player(name="Rinsyi", jwt=ACCOUNT_JWT)
 while True:
     try:
 
-        rinsyi.move(6,1) # ash tree
-        for i in range(30):
-            status_code, response = rinsyi.gathering()
-            if status_code != 200:
-                print(f"Failed to gather: {response}")
-                if status_code == 497:
-                    print(f"Inventory full. Batch deposit all items to bank.")
-                    # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move_to_closest_bank()
-                    rinsyi.batch_deposit_items_to_bank()
-                    rinsyi.deposit_gold_to_bank()
-                    rinsyi.move(6,1)
-            else:
-                print(f"Gathered ash trees and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
-
 
         rinsyi.move(2,0) # copper rocks
         for i in range(30):
@@ -95,7 +80,22 @@ while True:
             else:
                 print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
 
-        
+        rinsyi.move(6,1) # ash tree
+        for i in range(30):
+            status_code, response = rinsyi.gathering()
+            if status_code != 200:
+                print(f"Failed to gather: {response}")
+                if status_code == 497:
+                    print(f"Inventory full. Batch deposit all items to bank.")
+                    # rinsyi.deposit_item_to_bank(item_code="chicken", )
+                    rinsyi.move_to_closest_bank()
+                    rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
+                    rinsyi.move(6,1)
+            else:
+                print(f"Gathered ash trees and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
+
+
     except KeyboardInterrupt:
-        sys.exit() 
+        sys.exit()
 
