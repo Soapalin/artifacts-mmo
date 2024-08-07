@@ -10,6 +10,9 @@ class ArtifactAlgorithm(Player):
         self.jwt = jwt 
         self.server = "https://api.artifactsmmo.com"
         print(self.server)
+        self.bank = [4, 1]
+
+
 
     def fighter():
         """

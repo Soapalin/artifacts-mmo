@@ -194,6 +194,10 @@ class Player():
         else:
             return r.status_code, r.json()
         
+    def move_to_closest_bank(self):
+        print("move_to_closest_bank | ")
+        self.move(4,1)
+        
 
     def fishing(self):
         fishing_api = f"{self.server}/my/{self.name}/action/fishing"

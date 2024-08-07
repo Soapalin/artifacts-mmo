@@ -24,7 +24,7 @@ while True:
                 if status_code == 497:
                     print(f"Inventory full. Batch deposit all items to bank.")
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move(4,1)
+                    rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.move(6,1)
             else:
@@ -39,7 +39,7 @@ while True:
                 if status_code == 497:
                     print(f"Inventory full. Batch deposit all items to bank.")
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move(4,1)
+                    rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.move(2,0)
             else:
@@ -53,7 +53,7 @@ while True:
                 if status_code == 497:
                     print(f"Inventory full. Batch deposit all items to bank.")
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move(4,1)
+                    rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.move(4,2)
             else:
@@ -68,7 +68,7 @@ while True:
                 if status_code == 497:
                     print(f"Inventory full. Batch deposit all items to bank.")
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move(4,1)
+                    rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.move(5,2)
             else:
@@ -82,7 +82,7 @@ while True:
                 if status_code == 497:
                     print(f"Inventory full. Batch deposit all items to bank.")
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
-                    rinsyi.move(4,1)
+                    rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.move(0,1)
             else:
