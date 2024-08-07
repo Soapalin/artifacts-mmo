@@ -26,6 +26,7 @@ while True:
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
                     rinsyi.move(6,1)
             else:
                 print(f"Gathered ash trees and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
@@ -41,6 +42,7 @@ while True:
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
                     rinsyi.move(2,0)
             else:
                 print(f"Gathered copper rocks and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
@@ -55,6 +57,7 @@ while True:
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
                     rinsyi.move(4,2)
             else:
                 print(f"Fished gudgeon fishing spot and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
@@ -70,6 +73,7 @@ while True:
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
                     rinsyi.move(5,2)
             else:
                 print(f"Fished shrimp fishing spot and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
@@ -84,6 +88,7 @@ while True:
                     # rinsyi.deposit_item_to_bank(item_code="chicken", )
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
+                    rinsyi.deposit_gold_to_bank()
                     rinsyi.move(0,1)
             else:
                 print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")

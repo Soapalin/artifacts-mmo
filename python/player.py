@@ -152,8 +152,37 @@ class Player():
             return r.status_code, r.json()
 
 
-    def deposit_gold_to_bank(self, amount):
-        pass
+    def deposit_gold_to_bank(self, amount=None):
+        deposit_gold_api = f"{self.server}/my/{self.name}/action/bank/deposit/gold"
+        if amount is None: #deposit all
+            status, response = self.fetch_character_status()
+            if status == 200:
+                self.gold = response["gold"]
+                if self.gold > 0:
+                    body = "{" + f"\"quantity\": {self.gold}"  + "}"
+                    r = requests.post(deposit_gold_api, data=body, headers=self.auth_header)
+                    print(f"deposit_gold_to_bank | {r.status_code}")
+                    if r.status_code == 200:
+                        response = r.json()["data"]
+                        self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+                        self.waitCooldown()
+                        return r.status_code, response
+                    else:
+                        return r.status_code, r.json()
+                else:
+                    print(f"deposit_gold_to_bank | no gold to deposit")
+        else: 
+            body = "{" + f"\"quantity\": {amount}"  + "}"
+            r = requests.post(deposit_gold_api, data=body, headers=self.auth_header)
+            print(f"deposit_gold_to_bank | {r.status_code}")
+            if r.status_code == 200:
+                response = r.json()["data"]
+                self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+                self.waitCooldown()
+                return r.status_code, response
+            else:
+                return r.status_code, r.json()
+
 
 
     def fight(self):
