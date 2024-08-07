@@ -93,7 +93,7 @@ class Player():
         body = "{" + f"\"x\": \"{x}\",\"y\": \"{y}\""  + "}"
         move_api = f"{self.server}/my/{self.name}/action/move"
         r = requests.post(move_api, data=body, headers=self.auth_header)
-        print(f"move: {r.status_code}")
+        print(f"move() | {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
             print(response)
@@ -109,14 +109,14 @@ class Player():
         self.cooldown = cooldown
 
     def waitCooldown(self):
-        print(f"waitCooldown: {self.cooldown}s")
+        print(f"waitCooldown | {self.cooldown}s")
         time.sleep(self.cooldown)
 
 
     def fetch_character_status(self):
         char_status = f"{self.server}/characters/{self.name}"
         r = requests.get(char_status, headers=self.auth_header)
-        print(f"fetch_character_status: {r.status_code}")
+        print(f"fetch_character_status | {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
             return r.status_code, response
@@ -159,7 +159,46 @@ class Player():
     def fight(self):
         fight_api = f"{self.server}/my/{self.name}/action/fight"
         r = requests.post(fight_api, headers=self.auth_header)
-        print(f"fight: {r.status_code}")
+        print(f"fight() | {r.status_code}")
+        if r.status_code == 200:
+            response = r.json()["data"]
+            self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+            self.waitCooldown()
+            return r.status_code, response
+        elif r.status_code == 499:
+                response = r.json()
+                cooldown = response["error"]["message"].rstrip(" seconds left.")
+                cooldown = cooldown.lstrip("Character in cooldown: ")
+                cooldown = int(cooldown.split(".")[0])
+                time.sleep(cooldown+1)
+                return r.status_code, response
+        else:
+            return r.status_code, r.json()
+        
+    def gathering(self):
+        gathering_api = f"{self.server}/my/{self.name}/action/gathering"
+        r = requests.post(gathering_api, headers=self.auth_header)
+        print(f"gathering() | {r.status_code}")
+        if r.status_code == 200:
+            response = r.json()["data"]
+            self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+            self.waitCooldown()
+            return r.status_code, response
+        elif r.status_code == 499:
+                response = r.json()
+                cooldown = response["error"]["message"].rstrip(" seconds left.")
+                cooldown = cooldown.lstrip("Character in cooldown: ")
+                cooldown = int(cooldown.split(".")[0])
+                time.sleep(cooldown+1)
+                return r.status_code, response
+        else:
+            return r.status_code, r.json()
+        
+
+    def fishing(self):
+        fishing_api = f"{self.server}/my/{self.name}/action/fishing"
+        r = requests.post(fishing_api, headers=self.auth_header)
+        print(f"fishing() | {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
             self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
