@@ -49,19 +49,19 @@ while True:
 
 
 
-        suiren.move(6,1) # ash tree
-        for i in range(30):
-            status_code, response = suiren.gathering()
-            if status_code != 200:
-                print(f"Failed to gather: {response}")
-                if status_code == 497:
-                    print(f"Inventory full. Batch deposit all items to bank.")
-                    suiren.move_to_closest_bank()
-                    suiren.batch_deposit_items_to_bank()
-                    suiren.deposit_gold_to_bank()
-                    suiren.move(6,1)
-            else:
-                print(f"Gathered ash trees and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
+        # suiren.move(6,1) # ash tree
+        # for i in range(30):
+        #     status_code, response = suiren.gathering()
+        #     if status_code != 200:
+        #         print(f"Failed to gather: {response}")
+        #         if status_code == 497:
+        #             print(f"Inventory full. Batch deposit all items to bank.")
+        #             suiren.move_to_closest_bank()
+        #             suiren.batch_deposit_items_to_bank()
+        #             suiren.deposit_gold_to_bank()
+        #             suiren.move(6,1)
+        #     else:
+        #         print(f"Gathered ash trees and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
 
 
     except KeyboardInterrupt:

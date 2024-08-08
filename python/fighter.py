@@ -78,7 +78,7 @@ while True:
         #     else:
         #         print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
 
-        rinsyi.move(4,-1) # yellow slime
+        rinsyi.move(3,-2) # green slime
         for i in range(60):
             status_code, response = rinsyi.fight()
             if status_code != 200:
@@ -88,7 +88,7 @@ while True:
                     rinsyi.move_to_closest_bank()
                     rinsyi.batch_deposit_items_to_bank()
                     rinsyi.deposit_gold_to_bank()
-                    rinsyi.move(4,-1)
+                    rinsyi.move(3,-2)
             else:
                 print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
         # rinsyi.move(6,1) # ash tree

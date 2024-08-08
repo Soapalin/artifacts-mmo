@@ -17,7 +17,6 @@ class Player():
     def init_char_status(self):
         status, response = self.fetch_character_status()
         if status == 200:
-            print(response)
             self.level = response["level"]
             self.xp = response["xp"]
             self.max_xp = response["max_xp"]
@@ -100,7 +99,6 @@ class Player():
         print(f"move() | {r.status_code}")
         if r.status_code == 200:
             response = r.json()["data"]
-            print(response)
             self.updateCooldown(response["cooldown"]["remaining_seconds"])
             self.waitCooldown()
             return r.json()["data"]
@@ -251,7 +249,7 @@ class Player():
         else:
             return r.status_code, r.json()
         
-    def craft_copper(self, amount):
+    def craft_copper(self, amount=None):
         craft_api = f"{self.server}/my{self.name}/action/crafting"
         body = "{" + f"\"code\": \"copper ore\",\"quantity\": {amount}"  + "}"
         if amount is None:
