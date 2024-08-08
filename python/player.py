@@ -1,6 +1,8 @@
 import requests
 import datetime
 import time
+import sys
+import datetime
 
 class Player():
     def __init__(self, name, jwt):
@@ -15,6 +17,7 @@ class Player():
     def init_char_status(self):
         status, response = self.fetch_character_status()
         if status == 200:
+            print(response)
             self.level = response["level"]
             self.xp = response["xp"]
             self.max_xp = response["max_xp"]
@@ -61,9 +64,10 @@ class Player():
             self.x = response["x"]
             self.y = response["y"]
             self.cooldown = response["cooldown"]
-            print(self.cooldown)
-            self.waitCooldown()
             self.cooldown_expiration = response["cooldown_expiration"]
+            
+            if(datetime.datetime.now() < datetime.datetime.strptime(self.cooldown_expiration.split(".")[0], "%Y-%m-%dT%H:%M:%S")): #2024-08-08T00:57:19.791Z
+                self.waitCooldown()
             self.weapon_slot = response["weapon_slot"]
             self.shield_slot = response["shield_slot"]
             self.helmet_slot = response["helmet_slot"]
@@ -246,3 +250,38 @@ class Player():
                 return r.status_code, response
         else:
             return r.status_code, r.json()
+        
+    def craft_copper(self, amount):
+        craft_api = f"{self.server}/my{self.name}/action/crafting"
+        body = "{" + f"\"code\": \"copper ore\",\"quantity\": {amount}"  + "}"
+        if amount is None:
+            #craft all
+            fetch_status, response = self.fetch_character_status()
+            for item in self.inventory:
+                if item["code"] == 'copper ore':
+                    amount = item["quantity"]
+                    break
+            if amount is None:
+                return 478, "Not enough copper ore"
+            body = "{" + f"\"code\": \"copper ore\",\"quantity\": {amount}"  + "}"
+            r = requests.post(craft_api, data=body, headers=self.auth_header)
+            print(f"craft_copper | {r.status_code}")
+            if r.status_code == 200:
+                response = r.json()["data"]
+                self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+                self.waitCooldown()
+                return r.status_code, response
+            else:
+                return r.status_code, r.json()
+        else:
+            r = requests.post(craft_api, data=body, headers=self.auth_header)
+            print(f"craft_copper | {r.status_code}")
+            if r.status_code == 200:
+                response = r.json()["data"]
+                self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+                self.waitCooldown()
+                return r.status_code, response
+            else:
+                return r.status_code, r.json()
+
+
