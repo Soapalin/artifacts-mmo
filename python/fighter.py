@@ -3,12 +3,15 @@ from dotenv import load_dotenv
 from player import Player
 import time
 import sys
+from artifact_connect import ArtifactAlgorithm
 
 load_dotenv()
 ACCOUNT_JWT = os.getenv("JWT_KEY")
 CHARACTER_NAMES = ["Rinsyi"]
 
-rinsyi = Player(name="Rinsyi", jwt=ACCOUNT_JWT)
+# rinsyi = Player(name="Rinsyi", jwt=ACCOUNT_JWT)
+
+rinsyi = ArtifactAlgorithm(name="Rinsyi", jwt=ACCOUNT_JWT)
 
 
 # rinsyi.move_to_closest_bank()
@@ -77,6 +80,7 @@ while True:
         #             rinsyi.move(0,1)
         #     else:
         #         print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
+        rinsyi.fighter()
 
         rinsyi.move(3,-2) # green slime
         for i in range(60):
@@ -91,6 +95,8 @@ while True:
                     rinsyi.move(3,-2)
             else:
                 print(f"Fought and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
+
+
         # rinsyi.move(6,1) # ash tree
         # for i in range(30):
         #     status_code, response = rinsyi.gathering()

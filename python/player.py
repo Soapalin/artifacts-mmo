@@ -3,6 +3,15 @@ import datetime
 import time
 import sys
 import datetime
+from enum import Enum
+
+class RequestType(Enum):
+    GET = 0 
+    POST = 1
+
+
+
+
 
 class Player():
     def __init__(self, name, jwt):
@@ -113,6 +122,33 @@ class Player():
     def waitCooldown(self):
         print(f"waitCooldown | {self.cooldown}s")
         time.sleep(self.cooldown)
+    
+    def req(self, api, type=RequestType.GET, body=None):
+        if type == RequestType.GET:
+            r = requests.get(api, headers=self.auth_header)
+        else:
+            if body is None:
+                raise Exception("body should not be None for POST requests.")
+            r = requests.post(api, headers=self.auth_header, data=body)
+
+        status = r.status_code
+        if status == 200:
+            response = r.json()["data"]
+            self.updateCooldown(response["cooldown"]["remaining_seconds"] + 1)
+            self.waitCooldown()
+            return status, response
+        elif status == 491 or status == 499:
+            cooldown = response["error"]["message"].rstrip(" seconds left.")
+            cooldown = cooldown.lstrip("Character in cooldown: ")
+            cooldown = int(cooldown)
+            time.sleep(cooldown+1)
+            return self.req(api, type, body)
+        elif status == 503:
+            print("Service Unavailable Status Code 503. Wait for 5 minutes")
+            time.sleep(5 * 60 * 60)
+            return self.req(api, type, body)
+        else:
+            return r.status_code, r.json()
 
 
     def fetch_character_status(self):

@@ -31,19 +31,6 @@ while True:
                     suiren.batch_deposit_items_to_bank()
                     suiren.deposit_gold_to_bank()
                     suiren.move(2,0)
-                    # print(f"Inventory full. Batch deposit all items to bank.")
-                    # if random.choice([True,False]):
-                    #     suiren.move_to_closest_bank()
-                    #     suiren.batch_deposit_items_to_bank()
-                    #     suiren.deposit_gold_to_bank()
-                    #     suiren.move(2,0)
-                    # else:
-                    #     suiren.move(1,5) #forge
-                    #     suiren.craft_copper()
-                    #     suiren.move_to_closest_bank()
-                    #     suiren.batch_deposit_items_to_bank()
-                    #     suiren.deposit_gold_to_bank()
-                    #     suiren.move(2,0)
             else:
                 print(f"Gathered copper rocks and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
 
