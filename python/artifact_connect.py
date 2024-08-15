@@ -36,8 +36,22 @@ class ArtifactAlgorithm(Player):
         """
         Gatherer type of character will gather any types of resources
         """
-        pass
-
+        for i in range(loop_size):
+            self.player.move(x,y)
+            for i in range(60):
+                status_code, response = self.player.gathering()
+                if status_code != 200:
+                    print(f"Failed to gather: {response}")
+                    if status_code == 497:
+                        print(f"Inventory full. Crafting copper and deposit to bank.")
+                        # self.player.move(1,5) #forge
+                        # self.player.craft_copper()
+                        self.player.move_to_closest_bank()
+                        self.player.batch_deposit_items_to_bank()
+                        self.player.deposit_gold_to_bank()
+                        self.player.move(x,y)
+                else:
+                    print(f"Gathered copper rocks and waited for cooldown: {response['cooldown']['remaining_seconds'] + 1}s")
 
     def miner():
         """

@@ -115,5 +115,6 @@ try:
 
 
 except KeyboardInterrupt:
+    print("KeyboardInterrupt")
     sys.exit()
 
